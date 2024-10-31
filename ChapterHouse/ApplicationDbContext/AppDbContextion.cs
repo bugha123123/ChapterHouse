@@ -19,51 +19,60 @@ namespace ChapterHouse.ApplicationDbContext
         {
             using (var httpClient = new HttpClient())
             {
-                // Example URL to fetch books; replace with a suitable API
                 string url = "https://www.googleapis.com/books/v1/volumes?q=spooky+books";
-
                 var response = await httpClient.GetStringAsync(url);
-
-                // Deserialize JSON response to dynamic object
                 var booksData = JsonSerializer.Deserialize<JsonElement>(response);
 
-                // Fetch existing books from the database
                 var existingBooks = await Books.ToListAsync();
                 var existingTitles = existingBooks.Select(b => b.Title).ToHashSet();
 
                 var bookList = new List<Books>();
-                int count = 0; // Counter for unique books
+                int count = 0;
 
                 foreach (var item in booksData.GetProperty("items").EnumerateArray())
                 {
-                    if (count >= 20) break; // Stop if we reach the limit
+                    if (count >= 20) break;
 
                     var volumeInfo = item.GetProperty("volumeInfo");
                     var title = volumeInfo.GetProperty("title").GetString();
 
-                    // Skip if the book is already in the database
                     if (existingTitles.Contains(title))
                     {
-                        continue; // go to the next itema
+                        continue;
                     }
 
                     var book = new Books
                     {
                         Title = title,
-                        Author = volumeInfo.GetProperty("authors").EnumerateArray().FirstOrDefault().GetString(),
+                        Author = volumeInfo.TryGetProperty("authors", out var authors) && authors.ValueKind == JsonValueKind.Array && authors.GetArrayLength() > 0
+                 ? authors[0].GetString()
+                 : "Unknown Author",
                         Description = volumeInfo.TryGetProperty("description", out var desc) ? desc.GetString() : "No description available",
                         ImageURL = volumeInfo.TryGetProperty("imageLinks", out var imageLinks) && imageLinks.TryGetProperty("thumbnail", out var thumbnail)
-                                    ? thumbnail.GetString() : "No image available",
-                        Genre = "Spooky", // Categorize as spooky genre
-                        Cost = volumeInfo.TryGetProperty("cost", out var cost) ? cost.GetDecimal() : 0.0m, // Default cost to 0.0 if not available
-                        Sale = volumeInfo.TryGetProperty("sale", out var sale) ? sale.GetDecimal() : 0.0m // Default sale to 0.0 if not available
+                 ? thumbnail.GetString() : "No image available",
+                        Genre = volumeInfo.TryGetProperty("categories", out var categories) && categories.ValueKind == JsonValueKind.Array && categories.GetArrayLength() > 0
+                 ? categories[0].GetString()
+                 : "Spooky",
+                        PublishedDate = volumeInfo.TryGetProperty("publishedDate", out var publishedDate) ? publishedDate.GetString() : "Unknown",
+                        Publisher = volumeInfo.TryGetProperty("publisher", out var publisher) ? publisher.GetString() : "Unknown",
+                        PageCount = volumeInfo.TryGetProperty("pageCount", out var pageCount) && pageCount.ValueKind == JsonValueKind.Number
+                 ? pageCount.GetInt32()
+                 : 0,
+                        Language = volumeInfo.TryGetProperty("language", out var language) ? language.GetString() : "Unknown",
+                        PreviewLink = volumeInfo.TryGetProperty("previewLink", out var previewLink) ? previewLink.GetString() : "No preview available",
+                        RatingsCount = volumeInfo.TryGetProperty("ratingsCount", out var ratingsCount) && ratingsCount.ValueKind == JsonValueKind.Number
+                    ? ratingsCount.GetInt32()
+                    : 0,
+                        AverageRating = volumeInfo.TryGetProperty("averageRating", out var avgRating) && avgRating.ValueKind == JsonValueKind.Number
+                     ? avgRating.GetDecimal()
+                     : 0.0m
                     };
 
+
                     bookList.Add(book);
-                    count++; // Increment the unique book counter
+                    count++;
                 }
 
-                // Add to database and save changes
                 if (bookList.Any())
                 {
                     await Books.AddRangeAsync(bookList);
@@ -71,6 +80,7 @@ namespace ChapterHouse.ApplicationDbContext
                 }
             }
         }
+
 
     }
 }

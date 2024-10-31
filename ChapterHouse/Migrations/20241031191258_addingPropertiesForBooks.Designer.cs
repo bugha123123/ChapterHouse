@@ -4,6 +4,7 @@ using ChapterHouse.ApplicationDbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChapterHouse.Migrations
 {
     [DbContext(typeof(AppDbContextion))]
-    partial class AppDbContextionModelSnapshot : ModelSnapshot
+    [Migration("20241031191258_addingPropertiesForBooks")]
+    partial class addingPropertiesForBooks
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,6 +38,9 @@ namespace ChapterHouse.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("AverageRating")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Cost")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Description")
@@ -70,6 +76,9 @@ namespace ChapterHouse.Migrations
 
                     b.Property<int>("RatingsCount")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("Sale")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Title")
                         .IsRequired()
