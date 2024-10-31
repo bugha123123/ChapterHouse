@@ -1,0 +1,13 @@
+body {
+    background: linear-gradient(180deg, rgba(34, 34, 34, 1) 0%, rgba(15, 15, 15, 1) 50%, rgba(68, 0, 0, 1) 100%);
+    color: #ffcccc; /* Light Red Text for Contrast */
+    font-family: 'Arial', sans-serif; /* Use a spooky font for a better effect */
+    margin: 0;
+    padding: 0;
+    height: 100vh; /* Full height */
+    overflow: hidden; /* Hide overflow if needed */
+}
+
+h1, h2, h3, h4, h5, h6 {
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7); /* Adding shadow to headers */
+}

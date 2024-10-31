@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ChapterHouse</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ChapterHouse.styles.css" asp-append-version="true" />
+</head>
+<style>
+    /* Spooky Navbar Styling */
+    .navbar {
+        background-color: #2e2e2e;
+        border-bottom: 1px solid #800;
+    }
+
+    .navbar-brand, .nav-link {
+        color: #ff6666 !important; /* Light Red */
+    }
+
+        .nav-link:hover {
+            color: #ffcccc !important; /* Lighter Red */
+            text-shadow: 1px 1px 5px #000; /* Glowing effect */
+        }
+
+    .navbar-toggler {
+        border-color: #800; /* Dark Red */
+    }
+
+    .navbar-toggler-icon {
+        background-color: #800; /* Dark Red */
+    }
+
+    .dropdown-menu {
+        background-color: #2e2e2e; /* Dark Background */
+        border: 1px solid #800; /* Dark Red Border */
+    }
+
+    .dropdown-item {
+        color: #ff6666; /* Light Red */
+    }
+
+        .dropdown-item:hover {
+            background-color: #800; /* Dark Red Hover */
+            color: #ffcccc; /* Lighter Red */
+            text-shadow: 1px 1px 5px #000; /* Glowing effect */
+        }
+</style>
+<body>
+
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand fw-bold" asp-action="Index" asp-controller="Home">Haunted Book Emporium</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" asp-action="Index" asp-controller="Home">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="topSellingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Popular
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="topSellingDropdown">
+                            <li><a class="dropdown-item" href="#">  Top Selling</a></li>
+                            <li><a class="dropdown-item" href="#">  Top Rated</a></li>
+                        </ul>
+                    </li>
+              
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">New Arrivals</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact Us</a>
+                    </li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="https://img.icons8.com/material-outlined/24/ff6666/user.png" alt="Profile" class="me-1" />
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end bg-dark text-light shadow-lg" aria-labelledby="profileDropdown">
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center" href="#">
+                                        <img src="https://img.icons8.com/material-outlined/24/ff6666/shopping-cart.png" alt="Cart" class="me-2" />
+                                        <span>Cart</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider" />
+                                </li>
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center" asp-action="SignoutUser" asp-controller="Auth">
+                                        
+                                        <span>Log Out</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="btn btn-danger text-white" asp-action="signup" asp-controller="Auth" role="button">Sign Up</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+ 
+  
+</body>
+</html>
