@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ChapterHouse.styles.css" asp-append-version="true" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nosifer&display=swap" rel="stylesheet">
 </head>
 <style>
     /* Spooky Navbar Styling */
@@ -46,17 +49,23 @@
             color: #ffcccc; /* Lighter Red */
             text-shadow: 1px 1px 5px #000; /* Glowing effect */
         }
+
+    .nosifer-regular {
+        font-family: "Nosifer", sans-serif;
+        font-weight: 400;
+        font-style: normal;
+    }
 </style>
 <body>
 
     <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <a class="navbar-brand fw-bold" asp-action="Index" asp-controller="Home">Haunted Book Emporium</a>
+            <a class="navbar-brand fw-bold nosifer-regular " asp-action="Index" asp-controller="Home">Haunted Book Emporium</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+            <div class="collapse navbar-collapse spooky-font" id="navbarNav">
+                <ul class="navbar-nav ms-auto ">
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" asp-action="Index" asp-controller="Home">Home</a>
                     </li>
@@ -84,7 +93,7 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end bg-dark text-light shadow-lg" aria-labelledby="profileDropdown">
                                 <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <a class="dropdown-item d-flex align-items-center" asp-action="Cart" asp-controller="Home">
                                         <img src="https://img.icons8.com/material-outlined/24/ff6666/shopping-cart.png" alt="Cart" class="me-2" />
                                         <span>Cart</span>
                                     </a>

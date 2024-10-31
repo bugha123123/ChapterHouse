@@ -19,10 +19,69 @@ public class BookService : IBookService
         _appDbContextion = appDbContextion;
     }
 
+
     public async Task<List<Books>> FetchSpookyBooks()
     {
         if (_appDbContextion.Books == null) throw new Exception("Books not available ");
         
         return await _appDbContextion.Books.ToListAsync();
+    }
+
+    public async Task AddBookToCart(int bookId)
+    {
+        var FoundBook = await GetBookById(bookId);
+        
+
+        if (FoundBook == null)
+        {
+            throw new Exception("Book not found by id");
+        }
+        var existingCart =  await _appDbContextion.Carts.FirstOrDefaultAsync(x => x.BookId == FoundBook.Id);
+
+        if (existingCart != null)
+        {
+            existingCart.Quantity += 1;
+
+            _appDbContextion.Carts.Update(existingCart);
+await            _appDbContextion.SaveChangesAsync();
+        }
+        else 
+        {
+            var BookToAdd = new Cart()
+            {
+                BookId = FoundBook.Id,
+                Price = 20,
+                Book = FoundBook,
+               Quantity = 1
+
+
+            };
+           
+
+            await _appDbContextion.Carts.AddAsync(BookToAdd);
+            await _appDbContextion.SaveChangesAsync();
+        }
+        
+
+
+    }
+
+    public async Task<Books> GetBookById(int BookId)
+    {
+        var FoundBookById =  await _appDbContextion.Books.FirstOrDefaultAsync(b => b.Id == BookId);
+        if (FoundBookById == null)
+            throw new Exception("Book not found");
+
+        return FoundBookById;
+    }
+
+    public async Task<List<Cart>> FetchCart()
+    {
+        var Cart = await _appDbContextion.Carts.ToListAsync();
+        if (Cart.Count == 0 )
+        {
+            throw new Exception("card is empty");
+        }
+        return Cart;
     }
 }
