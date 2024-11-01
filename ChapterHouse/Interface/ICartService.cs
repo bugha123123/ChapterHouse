@@ -21,6 +21,7 @@ namespace ChapterHouse.Interface
         //
         Task SendEmailAfterCheckout(string email);
 
+        Task ClearCart();
         
     }
 }

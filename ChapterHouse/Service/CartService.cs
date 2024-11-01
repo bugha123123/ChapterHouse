@@ -143,7 +143,9 @@ namespace ChapterHouse.Service
             }
 
             //// clear cart from books
-            //await ClearCart();
+            await ClearCart();
+
+
             // Create a string builder to build the HTML body
             var htmlBody = new StringBuilder();
 
@@ -164,7 +166,7 @@ namespace ChapterHouse.Service
                 htmlBody.AppendLine("<tr>");
                 htmlBody.AppendLine($"<td style='border: 1px solid #ddd; padding: 8px;'>{book.Title}</td>");
                 htmlBody.AppendLine($"<td style='border: 1px solid #ddd; padding: 8px;'>{book.Author}</td>");
-                htmlBody.AppendLine($"<td style='border: 1px solid #ddd; padding: 8px;'>$20</td>"); 
+                htmlBody.AppendLine($"<td style='border: 1px solid #ddd; padding: 8px;'>${20 * quantity}</td>"); 
                 htmlBody.AppendLine($"<td style='border: 1px solid #ddd; padding: 8px;'>{quantity}</td>");
                 htmlBody.AppendLine("</tr>");
             }
@@ -199,6 +201,14 @@ namespace ChapterHouse.Service
             }
         }
 
+        public async Task ClearCart()
+        {
+            var cartItems = await _appDbContextion.Carts.ToListAsync();
+
+            _appDbContextion.Carts.RemoveRange(cartItems);
+
+            await _appDbContextion.SaveChangesAsync();
+        }
 
     }
 }
