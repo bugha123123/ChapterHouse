@@ -16,6 +16,7 @@
         public string Language { get; set; }           // Language code, e.g., "en"
         public string PreviewLink { get; set; }        // Link to preview the book online
         public int RatingsCount { get; set; }          // Number of user ratings
-        public decimal AverageRating { get; set; }     // Average rating out of 5
+        public decimal AverageRating { get; set; }
+
     }
 }

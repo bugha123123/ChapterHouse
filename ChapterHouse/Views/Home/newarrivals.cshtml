@@ -1,0 +1,31 @@
+﻿@model List<Books>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nosifer&display=swap" rel="stylesheet">
+@{
+    ViewBag.Title = "New Arrivals";
+}
+
+<style>
+    .spooky-font {
+        font-family: 'Creepster', cursive;
+    }
+</style>
+
+<div class=" text-white min-h-screen p-8 spooky-font ">
+    <h1 class="text-4xl font-bold mb-6 text-center ">New Arrivals</h1>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 ">
+        @foreach (var book in Model)
+        {
+            <div class="bg-gray-800 p-4 rounded-lg shadow-md transition-transform transform hover:scale-105 ">
+                <img src="@book.ImageURL" alt="@book.Title" class="w-full h-60 object-cover rounded-md">
+                <h2 class="text-xl font-semibold mt-2">@book.Title</h2>
+                <p class="text-gray-400">@book.Author</p>
+                <p class="text-lg font-bold mt-2">$20</p>
+                <p class="text-gray-500 mt-2">@book.Genre</p>
+                <a  class="block mt-4 bg-red-600 text-center rounded py-2 hover:bg-red-700">View Details</a>
+            </div>
+        }
+    </div>
+</div>

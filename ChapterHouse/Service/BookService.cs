@@ -82,7 +82,18 @@ public class BookService : IBookService
 
         return FoundBookById;
     }
+    public async Task<List<Books>> FetchNewArrivals()
+    {
+        var allBooks = await _appDbContextion.Books.ToListAsync();
 
-  
+        var newArrivals = allBooks
+            .Where(x => DateTime.TryParse(x.PublishedDate, out var publishedDate) && publishedDate > new DateTime(2016, 1, 1))
+            .OrderByDescending(b => DateTime.Parse(b.PublishedDate)) 
+            .ToList();
+
+        return newArrivals;
+    }
+
+
 
 }
