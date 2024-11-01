@@ -137,7 +137,12 @@ namespace ChapterHouse.Service
                     else
                     {
                         bookQuantities[cartItem.Book.Id] = cartItem.Quantity;
-                        boughtItems.Books.Add(cartItem.Book); // Add the book to BoughtItems only once
+                        boughtItems.Books.Add(cartItem.Book);
+                        boughtItems.Quantity = cartItem.Quantity;
+                        boughtItems.BookId = cartItem.Book.Id;  
+                        // Add the book to BoughtItems only once
+                        await _appDbContextion.BoughtItems.AddAsync(boughtItems);
+                        await _appDbContextion.SaveChangesAsync();
                     }
                 }
             }
