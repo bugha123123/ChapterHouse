@@ -25,7 +25,8 @@ namespace ChapterHouse.Controllers
 
         public async Task<IActionResult> checkout()
         {
-            return View();
+            var FetchedCart = await _CartService.FetchCart();
+            return View(FetchedCart);
         }
         public async Task<IActionResult> Cart()
         {
@@ -86,6 +87,12 @@ namespace ChapterHouse.Controllers
             }
 
             return View("Cart", "Home");
+        }
+
+        public async Task<IActionResult> BuyItems(string email)
+        {
+            await _CartService.SendEmailAfterCheckout(email);
+            return RedirectToAction("Index", "Home");
         }
     }
 }

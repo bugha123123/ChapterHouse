@@ -43,7 +43,7 @@ public class BookService : IBookService
             throw new Exception("user not found");
         }
 
-        var existingCart =  await _appDbContextion.Carts.FirstOrDefaultAsync(x => x.BookId == FoundBook.Id);
+        var existingCart =  await _appDbContextion.Carts.FirstOrDefaultAsync(x => x.BookId == FoundBook.Id && x.UserId == LoggedInUser.Id);
 
         if (existingCart != null)
         {

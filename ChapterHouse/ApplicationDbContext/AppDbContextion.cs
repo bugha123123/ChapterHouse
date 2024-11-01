@@ -12,6 +12,8 @@ namespace ChapterHouse.ApplicationDbContext
     {
         public DbSet<Books> Books { get; set; }
         public DbSet<Cart> Carts { get; set; }
+
+        public DbSet<BoughtItems> BoughtItems { get; set; }
         public AppDbContextion(DbContextOptions<AppDbContextion> options) : base(options) { }
 
         // Method to fetch and seed spooky books into the database using googleapis.com
