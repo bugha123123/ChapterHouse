@@ -4,6 +4,7 @@ using ChapterHouse.ApplicationDbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChapterHouse.Migrations
 {
     [DbContext(typeof(AppDbContextion))]
-    partial class AppDbContextionModelSnapshot : ModelSnapshot
+    [Migration("20241101193008_AddingRela")]
+    partial class AddingRela
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,6 +39,9 @@ namespace ChapterHouse.Migrations
 
                     b.Property<decimal>("AverageRating")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("BoughtItemsId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -77,7 +83,34 @@ namespace ChapterHouse.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BoughtItemsId");
+
                     b.ToTable("Books");
+                });
+
+            modelBuilder.Entity("ChapterHouse.Models.BoughtItems", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("BoughtItems");
                 });
 
             modelBuilder.Entity("ChapterHouse.Models.Cart", b =>
@@ -308,6 +341,24 @@ namespace ChapterHouse.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ChapterHouse.Models.Books", b =>
+                {
+                    b.HasOne("ChapterHouse.Models.BoughtItems", null)
+                        .WithMany("Books")
+                        .HasForeignKey("BoughtItemsId");
+                });
+
+            modelBuilder.Entity("ChapterHouse.Models.BoughtItems", b =>
+                {
+                    b.HasOne("ChapterHouse.Models.User", "user")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("user");
+                });
+
             modelBuilder.Entity("ChapterHouse.Models.Cart", b =>
                 {
                     b.HasOne("ChapterHouse.Models.Books", "Book")
@@ -376,6 +427,11 @@ namespace ChapterHouse.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ChapterHouse.Models.BoughtItems", b =>
+                {
+                    b.Navigation("Books");
                 });
 #pragma warning restore 612, 618
         }

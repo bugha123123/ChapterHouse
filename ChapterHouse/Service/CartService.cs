@@ -113,48 +113,20 @@ namespace ChapterHouse.Service
         public async Task SendEmailAfterCheckout(string email)
         {
             var FetchedCart = await FetchCart();
-
-            // Create a BoughtItems instance
-            var boughtItems = new BoughtItems
-            {
-                Books = new List<Books>() 
-            };
-
-            // Create a dictionary to hold book quantities
+            var LoggedInUser = await _authService.GetLoggedInUserAsync();
             var bookQuantities = new Dictionary<int, int>();
 
-            // Add books from the fetched cart to the bought items and count quantities
-            foreach (var cartItem in FetchedCart)
-            {
-                // Assuming cartItem has a Book property and Quantity property
-                if (cartItem.Book != null)
-                {
-                    // If the book is already in the dictionary, increment its quantity
-                    if (bookQuantities.ContainsKey(cartItem.Book.Id))
-                    {
-                        bookQuantities[cartItem.Book.Id] += cartItem.Quantity;
-                    }
-                    else
-                    {
-                        bookQuantities[cartItem.Book.Id] = cartItem.Quantity;
-                        boughtItems.Books.Add(cartItem.Book);
-                        boughtItems.Quantity = cartItem.Quantity;
-                        boughtItems.BookId = cartItem.Book.Id;  
-                        // Add the book to BoughtItems only once
-                        await _appDbContextion.BoughtItems.AddAsync(boughtItems);
-                        await _appDbContextion.SaveChangesAsync();
-                    }
-                }
-            }
+        
 
-            //// clear cart from books
+            
+
+          
+
+            // clear cart
             await ClearCart();
 
-
-            // Create a string builder to build the HTML body
             var htmlBody = new StringBuilder();
 
-            // Add HTML structure
             htmlBody.AppendLine("<html><body>");
             htmlBody.AppendLine("<h1>Thank you for your purchase!</h1>");
             htmlBody.AppendLine($"<p>Dear {email},</p>");
@@ -162,16 +134,15 @@ namespace ChapterHouse.Service
             htmlBody.AppendLine("<table style='width:100%; border-collapse: collapse;'>");
             htmlBody.AppendLine("<tr><th style='border: 1px solid #ddd; padding: 8px;'>Book Title</th><th style='border: 1px solid #ddd; padding: 8px;'>Author</th><th style='border: 1px solid #ddd; padding: 8px;'>Price</th><th style='border: 1px solid #ddd; padding: 8px;'>Quantity</th></tr>");
 
-            // Iterate through bought items and add books to the email body
-            foreach (var book in boughtItems.Books)
+            foreach (var fetchedItems in FetchedCart)
             {
-                // Get the quantity from the dictionary
-                int quantity = bookQuantities[book.Id];
+                var book = fetchedItems.Book;
+                int quantity = fetchedItems.Quantity;
 
                 htmlBody.AppendLine("<tr>");
                 htmlBody.AppendLine($"<td style='border: 1px solid #ddd; padding: 8px;'>{book.Title}</td>");
                 htmlBody.AppendLine($"<td style='border: 1px solid #ddd; padding: 8px;'>{book.Author}</td>");
-                htmlBody.AppendLine($"<td style='border: 1px solid #ddd; padding: 8px;'>${20 * quantity}</td>"); 
+                htmlBody.AppendLine($"<td style='border: 1px solid #ddd; padding: 8px;'>${20 * quantity}</td>");
                 htmlBody.AppendLine($"<td style='border: 1px solid #ddd; padding: 8px;'>{quantity}</td>");
                 htmlBody.AppendLine("</tr>");
             }
@@ -180,31 +151,31 @@ namespace ChapterHouse.Service
             htmlBody.AppendLine("<p>Thank you for shopping with us!</p>");
             htmlBody.AppendLine("</body></html>");
 
-            using (var client = new SmtpClient())
+            // Send the email
+            using (var client = new SmtpClient("smtp.gmail.com", 587))
             {
                 client.Host = "smtp.gmail.com";
                 client.Port = 587;
                 client.DeliveryMethod = SmtpDeliveryMethod.Network;
                 client.UseDefaultCredentials = false;
                 client.EnableSsl = true;
-                client.Credentials = new NetworkCredential("irakliberdzena314@gmail.com", "coca mmba ywsy lvyz ");
+                client.Credentials = new NetworkCredential("irakliberdzena314@gmail.com", "coca mmba ywsy lvyz");
 
-                using (var message = new MailMessage(
-                    from: new MailAddress("irakliberdzena314@gmail.com", "tryhardgamer"),
-                    to: new MailAddress(email, email)
-                ))
+                using (var message = new MailMessage())
                 {
-                    message.Subject = "Payment Receipt - Chapter House Checkout Service";
-                    message.IsBodyHtml = true; // Ensure that the body is treated as HTML
-
-                    // Set the HTML body
+                    message.From = new MailAddress("irakliberdzena314@gmail.com", "Spooky Bookstore");
+                    message.To.Add(new MailAddress(email));
+                    message.Subject = "Payment Receipt - Spooky Bookstore";
+                    message.IsBodyHtml = true;
                     message.Body = htmlBody.ToString();
 
                     // Send the email
-                    client.Send(message);
+                    await client.SendMailAsync(message);
                 }
             }
         }
+
+
 
         public async Task ClearCart()
         {

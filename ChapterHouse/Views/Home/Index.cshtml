@@ -1,28 +1,28 @@
 ﻿@model List<Books>
 
 <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
-
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 <style>
     .spooky-font {
-        font-family: 'Creepster', cursive; 
+        font-family: 'Creepster', cursive;
     }
 
     .card {
         border: none;
-        border-radius: 10px; 
+        border-radius: 10px;
     }
 
         .card:hover {
-            transform: translateY(-5px); 
-            transition: transform 0.2s; 
+            transform: translateY(-5px);
+            transition: transform 0.2s;
         }
 
     .card-img-top {
         border-top-left-radius: 10px;
-        border-top-right-radius: 10px; 
+        border-top-right-radius: 10px;
     }
 
     .carousel-item {
@@ -32,9 +32,9 @@
     .carousel-control-prev,
     .carousel-control-next {
         width: auto;
-        top: 50%; 
+        top: 50%;
         transform: translateY(-50%);
-        color: #000; /
+        color: #000;
     }
 
     .carousel-control-prev {
@@ -42,11 +42,9 @@
     }
 
     .carousel-control-next {
-        right: -30px; 
+        right: -30px;
     }
-
 </style>
-
 
 <header class="mt-5 text-light py-4">
     <div class="container text-center">
@@ -54,11 +52,8 @@
         <p class="lead">Where every page has a spine-tingling story waiting to haunt you...</p>
     </div>
 </header>
+
 <div class="container my-5">
-
-
-
-
     <div id="spookyBookCarousel" class="carousel slide" data-ride="carousel" style="position: relative;">
         <!-- Left Arrow -->
         <a class="carousel-control-prev" href="#spookyBookCarousel" role="button" data-slide="prev" style="width: auto; left: -30px;">
@@ -85,13 +80,22 @@
                                                 <input type="hidden" name="bookId" value="@book.Id" />
                                                 <div class="d-flex justify-content-between align-items-center">
                                                     <div>
-                                                        <button type="submit" class="btn btn-primary">Add to Cart</button>
+                                                        @if (!User.Identity.IsAuthenticated)
+                                                        {
+                                                            <button type="button" class="btn btn-primary"><a asp-action="signup" asp-controller="Auth" class="text-decoration-none spooky-font text-white">Add to Cart</a></button>
+                                                        }
+                                                        else
+                                                        {
+                                                            <button type="submit" class="btn btn-primary spooky-font text-white">Add to Cart</button>
+                                                        }
                                                     </div>
                                                     <div>
                                                         <p class="card-text text-muted">Pages: @book.PageCount</p>
                                                     </div>
                                                 </div>
                                             </form>
+
+
                                         </div>
                                     </div>
                                 </div>
@@ -108,6 +112,4 @@
             <span class="sr-only">Next</span>
         </a>
     </div>
-
 </div>
-
