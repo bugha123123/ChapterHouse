@@ -8,34 +8,84 @@ namespace ChapterHouse.Controllers
 {
     public class HomeController : Controller
     {
-       private readonly IBookService _bookService;
+       private readonly ICartService _CartService;
+        private readonly IBookService _bookservice;
 
-        public HomeController(IBookService bookService)
+        public HomeController(ICartService cartService, IBookService bookservice)
         {
-            _bookService = bookService;
+            _CartService = cartService;
+            _bookservice = bookservice;
         }
 
         public async Task<IActionResult> Index()
         {
-            var FetchedBooks = await _bookService.FetchSpookyBooks();
+            var FetchedBooks = await _bookservice.FetchSpookyBooks();
             return View(FetchedBooks);
         }
 
-
-        public async Task<IActionResult> Cart()
+        public async Task<IActionResult> checkout()
         {
             return View();
         }
+        public async Task<IActionResult> Cart()
+        {
+            var FetchedCart = await _CartService.FetchCart();
+
+            if (FetchedCart == null || !FetchedCart.Any())
+            {
+                TempData["CartEmpty"] = "Your cart is empty!";
+                return View(new List<Cart>());
+            }
+
+            return View(FetchedCart);
+        }
+
 
         public async Task<IActionResult> AddBookToCart(int BookId)
         {
             if (ModelState.IsValid)
             {
-                await _bookService.AddBookToCart(BookId);
+                await _bookservice.AddBookToCart(BookId);
                 return RedirectToAction("Cart", "Home");
             }
 
             return View("Index", "Home"  );
+        }
+
+        public async Task<IActionResult> IncreaseQuantity(int CartId)
+        {
+            if (ModelState.IsValid)
+            {
+                await _CartService.IncreaseQuantity(CartId);
+                return RedirectToAction("Cart", "Home");
+
+            }
+
+            return View("Cart", "Home");
+        }
+
+        public async Task<IActionResult> DecreaseQuantity(int CartId)
+        {
+            if (ModelState.IsValid)
+            {
+                await _CartService.DecreaseQuantity(CartId);
+                return RedirectToAction("Cart", "Home");
+
+            }
+
+            return View("Cart", "Home");
+        }
+
+        public async Task<IActionResult> RemoveCart(int CartId)
+        {
+            if (ModelState.IsValid)
+            {
+                await _CartService.RemoveBookFromCart(CartId);
+                return RedirectToAction("Cart", "Home");
+
+            }
+
+            return View("Cart", "Home");
         }
     }
 }

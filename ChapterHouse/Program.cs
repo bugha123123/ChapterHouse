@@ -29,6 +29,7 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
 
 builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ICartService, CartService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

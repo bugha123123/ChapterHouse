@@ -13,10 +13,11 @@ public class BookService : IBookService
 {
 
     private readonly AppDbContextion _appDbContextion;
-
-    public BookService(AppDbContextion appDbContextion)
+    private readonly IAuthService _authService;
+    public BookService(AppDbContextion appDbContextion, IAuthService authService)
     {
         _appDbContextion = appDbContextion;
+        _authService = authService;
     }
 
 
@@ -30,20 +31,26 @@ public class BookService : IBookService
     public async Task AddBookToCart(int bookId)
     {
         var FoundBook = await GetBookById(bookId);
-        
+        var LoggedInUser = await _authService.GetLoggedInUserAsync();
 
         if (FoundBook == null)
         {
             throw new Exception("Book not found by id");
         }
+
+        if (LoggedInUser == null)
+        {
+            throw new Exception("user not found");
+        }
+
         var existingCart =  await _appDbContextion.Carts.FirstOrDefaultAsync(x => x.BookId == FoundBook.Id);
 
         if (existingCart != null)
         {
             existingCart.Quantity += 1;
 
-            _appDbContextion.Carts.Update(existingCart);
-await            _appDbContextion.SaveChangesAsync();
+                _appDbContextion.Carts.Update(existingCart);
+           await   _appDbContextion.SaveChangesAsync();
         }
         else 
         {
@@ -52,7 +59,10 @@ await            _appDbContextion.SaveChangesAsync();
                 BookId = FoundBook.Id,
                 Price = 20,
                 Book = FoundBook,
-               Quantity = 1
+               Quantity = 1,
+               User = LoggedInUser,
+               UserId = LoggedInUser.Id
+
 
 
             };
@@ -61,9 +71,7 @@ await            _appDbContextion.SaveChangesAsync();
             await _appDbContextion.Carts.AddAsync(BookToAdd);
             await _appDbContextion.SaveChangesAsync();
         }
-        
-
-
+      
     }
 
     public async Task<Books> GetBookById(int BookId)
@@ -75,13 +83,6 @@ await            _appDbContextion.SaveChangesAsync();
         return FoundBookById;
     }
 
-    public async Task<List<Cart>> FetchCart()
-    {
-        var Cart = await _appDbContextion.Carts.ToListAsync();
-        if (Cart.Count == 0 )
-        {
-            throw new Exception("card is empty");
-        }
-        return Cart;
-    }
+  
+
 }
