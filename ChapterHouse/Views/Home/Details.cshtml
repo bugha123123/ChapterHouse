@@ -1,0 +1,81 @@
+﻿
+@model Books
+
+<script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                colors: {
+                    spooky: {
+                        100: '#d1d1e1',
+                        200: '#a3a3c2',
+                        300: '#7575a3',
+                        400: '#474784',
+                        500: '#191965',
+                        600: '#141451',
+                        700: '#0f0f3d',
+                        800: '#0a0a28',
+                        900: '#050514'
+                    }
+                }
+            }
+        }
+    }
+</script>
+
+
+<div class=" text-spooky-100 min-h-screen flex flex-col">
+
+
+    <main class="flex-grow container mx-auto px-4 py-8 mt-xxl-5">
+        <div class="grid md:grid-cols-2 gap-8">
+            <div class="space-y-4">
+                <img src="@Model.ImageURL" alt="@Model.Title" class="w-full h-75 max-w-md mx-auto shadow-lg rounded-lg">
+                <div class="flex justify-center space-x-4">
+                    <form asp-action="AddBookToCart" asp-controller="Home" method="post">
+                        <input type="hidden" name="bookId" value="@Model.Id" />
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                @if (!User.Identity.IsAuthenticated)
+                                {
+                                    <button type="button" class="btn btn-primary"><a asp-action="signup" asp-controller="Auth" class="text-decoration-none spooky-font text-white">Add to Cart</a></button>
+                                }
+                                else
+                                {
+                                    <button type="submit" class="btn btn-primary spooky-font text-white">Add to Cart</button>
+                                }
+                            </div>
+                       
+                        </div>
+                    </form>
+                   
+                    <button class="bg-spooky-700 hover:bg-spooky-800 text-white font-bold py-2 px-4 rounded transition duration-300">
+                        Add to Wishlist
+                    </button>
+                </div>
+            </div>
+            <div class="space-y-6">
+                <h2 class="text-4xl font-bold text-spooky-100">The Haunting of Shadow Manor</h2>
+                <p class="text-xl text-spooky-200">@Model.Publisher</p>
+                @{
+                    var descriptionWords = @Model.Description.Split(' ').Take(400);
+                    var truncatedDescription = string.Join(" ", descriptionWords) + (descriptionWords.Count() == 50 ? "..." : "");
+                }
+
+                <p class="text-spooky-200 leading-relaxed">
+                    @truncatedDescription
+                </p>
+
+                <div class="space-y-2">
+                    <p><span class="font-semibold">Genre:</span> @Model.Genre</p>
+                    <p><span class="font-semibold">Pages:</span> @Model.PageCount</p>
+                    <p><span class="font-semibold">Published:</span> @Model.PublishedDate</p>
+                    <p><span class="font-semibold">ISBN:</span> 978-1234567890</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+</div>

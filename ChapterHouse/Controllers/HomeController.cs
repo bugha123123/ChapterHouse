@@ -27,6 +27,14 @@ namespace ChapterHouse.Controllers
             var NewArrivals = await _bookservice.FetchNewArrivals();
             return View(NewArrivals);
         }
+
+        public async Task<IActionResult> Details(int BookId)
+        {
+            var FetchedBookById = await _bookservice.FetchBookById(BookId);
+            return View(FetchedBookById);
+        }
+
+
         public async Task<IActionResult> checkout()
         {
             var FetchedCart = await _CartService.FetchCart();

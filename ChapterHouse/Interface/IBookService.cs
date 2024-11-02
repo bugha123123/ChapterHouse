@@ -13,6 +13,9 @@ namespace ChapterHouse.Interface
 
         Task<List<Books>> FetchNewArrivals();
 
-      
+        Task<Books> FetchBookById(int BookId);
+
+
+
     }
 }

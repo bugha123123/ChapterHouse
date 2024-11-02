@@ -94,6 +94,10 @@ public class BookService : IBookService
         return newArrivals;
     }
 
+    public async Task<Books> FetchBookById(int BookId)
+    {
+        var FoundBook = await _appDbContextion.Books.FirstOrDefaultAsync(x => x.Id == BookId);
 
-
+        return FoundBook;
+    }
 }

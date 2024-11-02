@@ -113,8 +113,6 @@ namespace ChapterHouse.Service
         public async Task SendEmailAfterCheckout(string email)
         {
             var FetchedCart = await FetchCart();
-            var LoggedInUser = await _authService.GetLoggedInUserAsync();
-            var bookQuantities = new Dictionary<int, int>();
 
         
 

@@ -9,5 +9,9 @@ namespace ChapterHouse.Interface
         Task RegisterUser(RegisterViewModel registerViewModel);
         Task LogInUser(LogInViewModel logInViewModel);
         Task LogOutUser();
+
+        Task SendResurrectPasswordEmail(string email);
+
+        Task ResetPassword(string email, DateTime EmailsendTime, string password);
     }
 }

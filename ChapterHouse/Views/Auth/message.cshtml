@@ -1,0 +1,50 @@
+﻿<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<style>
+    .font-spooky {
+        font-family: 'Creepster', cursive;
+    }
+    keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+        100% { transform: translateY(0px); }
+    }
+    .float-animation {
+        animation: float 6s ease-in-out infinite;
+    }
+    body{
+        overflow-y:hidden;
+    }
+</style>
+
+<div class="flex justify-content-center align-items-center min-h-screen">
+    <div class="w-full max-w-md p-8 space-y-8 bg-gray-800 rounded-lg shadow-2xl ">
+        <div class="text-center">
+            <div class="flex justify-center mb-6">
+                <i data-lucide="mail-warning" class="w-24 h-24 text-purple-400 float-animation"></i>
+            </div>
+            <h2 class="mt-6 text-4xl font-spooky text-purple-400">Check Your Inbox</h2>
+            <p class="mt-2 text-sm text-gray-400">We've sent a spectral message to your email</p>
+        </div>
+        <div class="mt-8 space-y-6">
+            <p class="text-center text-gray-300">
+                If you don't see the email, check your spam folder. It might be hiding in the shadows.
+            </p>
+            <div class="flex justify-center">
+                <button  class="group relative flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-all duration-300 ease-in-out transform hover:scale-105">
+
+                    <a asp-action="Index" asp-controller="Home" class="text-decoration-none text-white"> Return to the Crypt</a>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="fixed bottom-0 left-0 w-full h-16 bg-gradient-to-t from-black to-transparent"></div>
+</div>
+   
+
+    <script>
+        lucide.createIcons();
+    </script>
+

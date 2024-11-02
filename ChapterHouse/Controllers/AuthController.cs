@@ -22,7 +22,18 @@ namespace ChapterHouse.Controllers
         {
             return View();
         }
-
+        public IActionResult forgotpassword()
+        {
+            return View();
+        }
+        public IActionResult resetPassword()
+        {
+            return View();
+        }
+        public IActionResult message()
+        {
+            return View();
+        }
         public async Task<IActionResult> SigninUser(LogInViewModel logInViewModel)
         {
             if (ModelState.IsValid)
@@ -50,6 +61,28 @@ namespace ChapterHouse.Controllers
                 return RedirectToAction("Index", "Home");
            
          
+        }
+        // send reset password email to user
+        public async Task<IActionResult> SendRessurectEmail(string email)
+        {
+            if (ModelState.IsValid)
+            {
+                await _authService.SendResurrectPasswordEmail(email);   
+             return   RedirectToAction("message", "Auth");
+            }
+           return RedirectToAction("forgotpassword", "Auth");
+        }
+
+
+        // RESET PASSWORD
+        public async Task<IActionResult> CastNewSpell(string email, DateTime EmailSendTime, string password)
+        {
+            if (ModelState.IsValid)
+            {
+                await _authService.ResetPassword(email,EmailSendTime, password);
+                return RedirectToAction("signin", "Auth");
+            }
+            return RedirectToAction("resetPassword", "Auth");
         }
     }
 }
