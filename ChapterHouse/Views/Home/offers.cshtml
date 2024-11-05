@@ -1,0 +1,60 @@
+﻿<script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                colors: {
+                    halloween: {
+                        orange: '#ff6600',
+                        purple: '#6600ff',
+                    }
+                }
+            }
+        }
+    }
+</script>
+
+
+<header class="bg-halloween-purple p-4 shadow-lg">
+    <div class="container mx-auto flex justify-between items-center">
+        <h1 class="text-2xl md:text-4xl font-bold text-halloween-orange">Spooky Book Store</h1>
+        <nav>
+            <ul class="flex space-x-4">
+                <li><a href="#" class="hover:text-halloween-orange transition-colors">Home</a></li>
+                <li><a href="#" class="hover:text-halloween-orange transition-colors">Catalog</a></li>
+                <li><a href="#" class="text-halloween-orange">Offers</a></li>
+                <li><a href="#" class="hover:text-halloween-orange transition-colors">Contact</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main class="flex-grow container mx-auto px-4 py-8">
+    <h2 class="text-3xl md:text-5xl font-bold mb-8 text-center text-halloween-orange">Spooktacular Offers</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="bg-gray-800 p-6 rounded-lg shadow-lg transform hover:scale-105 transition-transform">
+            <h3 class="text-xl font-bold mb-2 text-halloween-orange">Haunted House Collection</h3>
+            <p class="mb-4">Explore our curated collection of haunted house tales. Perfect for a chilling night in!</p>
+            <p class="text-2xl font-bold mb-2">$29.99</p>
+            <p class="text-sm text-gray-400 mb-4">Original price: $49.99</p>
+            <button class="bg-halloween-orange text-white py-2 px-4 rounded hover:bg-orange-700 transition-colors">Add to Cart</button>
+        </div>
+
+        <div class="bg-gray-800 p-6 rounded-lg shadow-lg transform hover:scale-105 transition-transform">
+            <h3 class="text-xl font-bold mb-2 text-halloween-orange">Witches' Brew Bundle</h3>
+            <p class="mb-4">A magical mix of witch-themed books, from classic tales to modern spells.</p>
+            <p class="text-2xl font-bold mb-2">$34.99</p>
+            <p class="text-sm text-gray-400 mb-4">Original price: $59.99</p>
+            <button class="bg-halloween-orange text-white py-2 px-4 rounded hover:bg-orange-700 transition-colors">Add to Cart</button>
+        </div>
+
+        <div class="bg-gray-800 p-6 rounded-lg shadow-lg transform hover:scale-105 transition-transform">
+            <h3 class="text-xl font-bold mb-2 text-halloween-orange">Vampire Saga Set</h3>
+            <p class="mb-4">Sink your teeth into this thrilling vampire book series. Blood-curdling adventures await!</p>
+            <p class="text-2xl font-bold mb-2">$39.99</p>
+            <p class="text-sm text-gray-400 mb-4">Original price: $69.99</p>
+            <button class="bg-halloween-orange text-white py-2 px-4 rounded hover:bg-orange-700 transition-colors">Add to Cart</button>
+        </div>
+    </div>
+</main>

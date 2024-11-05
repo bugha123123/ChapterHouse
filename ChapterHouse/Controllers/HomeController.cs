@@ -33,8 +33,11 @@ namespace ChapterHouse.Controllers
             var FetchedBookById = await _bookservice.FetchBookById(BookId);
             return View(FetchedBookById);
         }
-
-
+        public async Task<IActionResult> offers()
+        {
+          
+            return View();
+        }
         public async Task<IActionResult> checkout()
         {
             var FetchedCart = await _CartService.FetchCart();
