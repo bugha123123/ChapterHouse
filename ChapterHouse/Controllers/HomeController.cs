@@ -38,6 +38,12 @@ namespace ChapterHouse.Controllers
           
             return View();
         }
+
+        public async Task<IActionResult> wishlist()
+        {
+            var WishList = await _bookservice.GetAllWishList();
+            return View(WishList);
+        }
         public async Task<IActionResult> checkout()
         {
             var FetchedCart = await _CartService.FetchCart();
@@ -109,5 +115,18 @@ namespace ChapterHouse.Controllers
             await _CartService.SendEmailAfterCheckout(email);
             return RedirectToAction("Index", "Home");
         }
+
+        public async Task<IActionResult> AddBookToWishList(int BookId)
+        {
+            await _bookservice.AddBookToWishList(BookId);
+            return RedirectToAction("wishlist", "Home");
+        }
+
+        public async Task<IActionResult> RemoveWishlistedBook(int BookId)
+        {
+            await _bookservice.RemoveBookFromWishList(BookId);
+            return RedirectToAction("wishlist", "Home");
+        }
     }
+
 }

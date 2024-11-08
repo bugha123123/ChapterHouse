@@ -15,7 +15,17 @@ namespace ChapterHouse.Interface
 
         Task<Books> FetchBookById(int BookId);
 
+       
 
+        Task<List<Books>> GetBooksByCategory(string category);
+
+        Task AddBookToWishList(int BookId);
+
+        Task<List<WishList>> GetAllWishList(); 
+
+        Task<WishList> GetWishListedBookById(int BookId);
+
+        Task RemoveBookFromWishList(int BookId);
 
     }
 }

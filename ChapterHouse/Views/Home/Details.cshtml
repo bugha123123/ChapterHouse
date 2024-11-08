@@ -49,10 +49,13 @@
                        
                         </div>
                     </form>
+                    <form asp-action="AddBookToWishList" asp-controller="Home" method="post">
+                        <input type="hidden" name="BookId" value="@Model.Id" />
+                        <button type="submit" class="bg-spooky-700 hover:bg-spooky-800 text-white font-bold py-2 px-4 rounded transition duration-300">
+                            Add to Wishlist
+                        </button>
+                   </form>
                    
-                    <button class="bg-spooky-700 hover:bg-spooky-800 text-white font-bold py-2 px-4 rounded transition duration-300">
-                        Add to Wishlist
-                    </button>
                 </div>
             </div>
             <div class="space-y-6">

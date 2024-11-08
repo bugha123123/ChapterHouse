@@ -1,4 +1,7 @@
-﻿<script>
+﻿@using ChapterHouse.Interface
+@inject IBookService _bookservice
+
+<script>
     tailwind.config = {
         darkMode: 'class',
         theme: {
@@ -14,34 +17,179 @@
     }
 </script>
 
-
-
 <main class="flex-grow container mx-auto px-4 py-8">
-    <h2 class="text-3xl md:text-5xl font-bold mb-8 text-center text-halloween-orange">Spooktacular Offers</h2>
+    <h2 class="text-4xl font-bold mb-8 text-center text-spooky-200">Special Offers</h2>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <div class="bg-gray-800 p-6 rounded-lg shadow-lg transform hover:scale-105 transition-transform">
-            <h3 class="text-xl font-bold mb-2 text-halloween-orange">Haunted House Collection</h3>
-            <p class="mb-4">Explore our curated collection of haunted house tales. Perfect for a chilling night in!</p>
-            <p class="text-2xl font-bold mb-2">$29.99</p>
-            <p class="text-sm text-gray-400 mb-4">Original price: $49.99</p>
-            <button class="bg-halloween-orange text-white py-2 px-4 rounded hover:bg-orange-700 transition-colors">Add to Cart</button>
-        </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+        <!-- Loop for Fiction Books (Limit to 6) -->
+        @foreach (var book in (await _bookservice.GetBooksByCategory("Fiction")).Take(3))
+        {
+            <div class="bg-spooky-800 rounded-lg shadow-xl p-6 transform transition duration-500 hover:scale-105">
+                <h3 class="text-2xl font-bold mb-4 text-spooky-200">@book.Title</h3>
+                <a asp-action="Details" asp-controller="Home" asp-route-BookId="@book.Id">
+                    <img src="@book.ImageURL" alt="@book.Title Book Cover" class="w-full h-64 object-cover mb-4 rounded">
+                </a>
+                <p class="mb-4">@GetTruncatedDescription(book.Description, 25)</p>
+                <p class="text-xl font-bold mb-2 text-spooky-300">Now: 12.99$</p>
+                <p class="text-sm line-through mb-4">Was: 20.00$</p>
+                <form asp-action="AddBookToCart" asp-controller="Home" method="post">
+                    <input type="hidden" name="bookId" value="@book.Id" />
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            @if (!User.Identity.IsAuthenticated)
+                            {
+                                <button type="button" class="btn btn-primary"><a asp-action="signup" asp-controller="Auth" class="text-decoration-none spooky-font text-white">Add to Cart</a></button>
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-primary spooky-font text-white">Add to Cart</button>
+                            }
+                        </div>
+                        <div>
+                            <p class="card-text text-muted">Pages: @book.PageCount</p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        }
 
-        <div class="bg-gray-800 p-6 rounded-lg shadow-lg transform hover:scale-105 transition-transform">
-            <h3 class="text-xl font-bold mb-2 text-halloween-orange">Witches' Brew Bundle</h3>
-            <p class="mb-4">A magical mix of witch-themed books, from classic tales to modern spells.</p>
-            <p class="text-2xl font-bold mb-2">$34.99</p>
-            <p class="text-sm text-gray-400 mb-4">Original price: $59.99</p>
-            <button class="bg-halloween-orange text-white py-2 px-4 rounded hover:bg-orange-700 transition-colors">Add to Cart</button>
-        </div>
+        <!-- Loop for Spooky Books (Limit to 6) -->
+        @foreach (var book in (await _bookservice.GetBooksByCategory("Spooky")).Take(3))
+        {
+            <div class="bg-spooky-800 rounded-lg shadow-xl p-6 transform transition duration-500 hover:scale-105">
+                <h3 class="text-2xl font-bold mb-4 text-spooky-200">@book.Title</h3>
+                <a asp-action="Details" asp-controller="Home" asp-route-BookId="@book.Id">
+                    <img src="@book.ImageURL" alt="@book.Title Book Cover" class="w-full h-64 object-cover mb-4 rounded">
+                </a>
+                <p class="mb-4">@GetTruncatedDescription(book.Description, 25)</p>
+                <p class="text-xl font-bold mb-2 text-spooky-300">Now: 12.99$</p>
+                <p class="text-sm line-through mb-4">Was: 20.00$</p>
+                <form asp-action="AddBookToCart" asp-controller="Home" method="post">
+                    <input type="hidden" name="bookId" value="@book.Id" />
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            @if (!User.Identity.IsAuthenticated)
+                            {
+                                <button type="button" class="btn btn-primary"><a asp-action="signup" asp-controller="Auth" class="text-decoration-none spooky-font text-white">Add to Cart</a></button>
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-primary spooky-font text-white">Add to Cart</button>
+                            }
+                        </div>
+                        <div>
+                            <p class="card-text text-muted">Pages: @book.PageCount</p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        }
 
-        <div class="bg-gray-800 p-6 rounded-lg shadow-lg transform hover:scale-105 transition-transform">
-            <h3 class="text-xl font-bold mb-2 text-halloween-orange">Vampire Saga Set</h3>
-            <p class="mb-4">Sink your teeth into this thrilling vampire book series. Blood-curdling adventures await!</p>
-            <p class="text-2xl font-bold mb-2">$39.99</p>
-            <p class="text-sm text-gray-400 mb-4">Original price: $69.99</p>
-            <button class="bg-halloween-orange text-white py-2 px-4 rounded hover:bg-orange-700 transition-colors">Add to Cart</button>
-        </div>
+        <!-- Loop for Witch Genre Books (Limit to 6) -->
+        @foreach (var book in (await _bookservice.GetBooksByCategory("Witch")).Take(3))
+        {
+            <div class="bg-spooky-800 rounded-lg shadow-xl p-6 transform transition duration-500 hover:scale-105">
+                <h3 class="text-2xl font-bold mb-4 text-spooky-200">@book.Title</h3>
+                <a asp-action="Details" asp-controller="Home" asp-route-BookId="@book.Id">
+                    <img src="@book.ImageURL" alt="@book.Title Book Cover" class="w-full h-64 object-cover mb-4 rounded">
+                </a>
+                <p class="mb-4">@GetTruncatedDescription(book.Description, 25)</p>
+                <p class="text-xl font-bold mb-2 text-spooky-300">Now: 12.99$</p>
+                <p class="text-sm line-through mb-4">Was: 20.00$</p>
+                <form asp-action="AddBookToCart" asp-controller="Home" method="post">
+                    <input type="hidden" name="bookId" value="@book.Id" />
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            @if (!User.Identity.IsAuthenticated)
+                            {
+                                <button type="button" class="btn btn-primary"><a asp-action="signup" asp-controller="Auth" class="text-decoration-none spooky-font text-white">Add to Cart</a></button>
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-primary spooky-font text-white">Add to Cart</button>
+                            }
+                        </div>
+                        <div>
+                            <p class="card-text text-muted">Pages: @book.PageCount</p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        }
+
+        @foreach (var book in (await _bookservice.GetBooksByCategory("Slasher")).Take(3))
+        {
+            <div class="bg-spooky-800 rounded-lg shadow-xl p-6 transform transition duration-500 hover:scale-105">
+                <h3 class="text-2xl font-bold mb-4 text-spooky-200">@book.Title</h3>
+                <a asp-action="Details" asp-controller="Home" asp-route-BookId="@book.Id">
+                    <img src="@book.ImageURL" alt="@book.Title Book Cover" class="w-full h-64 object-cover mb-4 rounded">
+                </a>
+                <p class="mb-4">@GetTruncatedDescription(book.Description, 25)</p>
+                <p class="text-xl font-bold mb-2 text-spooky-300">Now: 12.99$</p>
+                <p class="text-sm line-through mb-4">Was: 20.00$</p>
+                <form asp-action="AddBookToCart" asp-controller="Home" method="post">
+                    <input type="hidden" name="bookId" value="@book.Id" />
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            @if (!User.Identity.IsAuthenticated)
+                            {
+                                <button type="button" class="btn btn-primary"><a asp-action="signup" asp-controller="Auth" class="text-decoration-none spooky-font text-white">Add to Cart</a></button>
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-primary spooky-font text-white">Add to Cart</button>
+                            }
+                        </div>
+                        <div>
+                            <p class="card-text text-muted">Pages: @book.PageCount</p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        }
+
+        @foreach (var book in (await _bookservice.GetBooksByCategory("Paranormal fiction")).Take(3))
+        {
+            <div class="bg-spooky-800 rounded-lg shadow-xl p-6 transform transition duration-500 hover:scale-105">
+                <h3 class="text-2xl font-bold mb-4 text-spooky-200">@book.Title</h3>
+                <a asp-action="Details" asp-controller="Home" asp-route-BookId="@book.Id">
+                    <img src="@book.ImageURL" alt="@book.Title Book Cover" class="w-full h-64 object-cover mb-4 rounded">
+                </a>
+                <p class="mb-4">@GetTruncatedDescription(book.Description, 25)</p>
+                <p class="text-xl font-bold mb-2 text-spooky-300">Now: 12.99$</p>
+                <p class="text-sm line-through mb-4">Was: 20.00$</p>
+                <form asp-action="AddBookToCart" asp-controller="Home" method="post">
+                    <input type="hidden" name="bookId" value="@book.Id" />
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            @if (!User.Identity.IsAuthenticated)
+                            {
+                                <button type="button" class="btn btn-primary"><a asp-action="signup" asp-controller="Auth" class="text-decoration-none spooky-font text-white">Add to Cart</a></button>
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-primary spooky-font text-white">Add to Cart</button>
+                            }
+                        </div>
+                        <div>
+                            <p class="card-text text-muted">Pages: @book.PageCount</p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        }
+
     </div>
 </main>
+
+@functions {
+    public string GetTruncatedDescription(string description, int wordLimit)
+    {
+        if (string.IsNullOrEmpty(description)) return description;
+
+        var words = description.Split(' ');
+        if (words.Length <= wordLimit) return description;
+
+        return string.Join(" ", words.Take(wordLimit)) + "...";
+    }
+}

@@ -1,0 +1,44 @@
+﻿@model List<WishList>
+
+<style>
+    .font-creepster {
+        font-family: 'Creepster', cursive;
+    }
+</style>
+
+
+<div class="max-w-4xl mx-auto mt-5">
+    <header class="text-center mb-12">
+        <h1 class="text-5xl font-creepster mb-4 text-purple-400">Spooky Wishlist</h1>
+        <p class="text-xl text-gray-400">Keep track of the terrifying tales you wish to acquire...</p>
+    </header>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+       
+        @foreach (var wishlist in Model)
+        {
+            <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105">
+                <div class="flex">
+                    <a asp-action="Details" asp-controller="Home" asp-route-BookId="@wishlist.BookId">
+                        <img src="@wishlist.books.ImageURL" alt="The Haunting of Hill House" class="h-100 object-cover">
+                    </a>
+                    <div class="p-4 flex flex-col justify-between w-2/3">
+                        <div>
+                            <h2 class="text-xl font-semibold mb-2 text-purple-300">@wishlist.books.Title</h2>
+                            <p class="text-gray-400">Shirley Jackson</p>
+                        </div>
+                        <form asp-action="RemoveWishlistedBook" asp-controller="Home" method="post">
+                            <input hidden name="BookId" value="@wishlist.BookId" />
+                            <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors duration-300 self-end mt-4">
+                                Remove
+                            </button>
+                       </form>
+                    </div>
+                </div>
+            </div>
+        }
+
+
+   
+    </div>
+</div>

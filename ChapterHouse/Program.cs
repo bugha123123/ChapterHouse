@@ -49,12 +49,17 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+
+var scope = app.Services.CreateScope();
+var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContextion>();
 // Seed books after building the app
-using (var scope = app.Services.CreateScope())
+await dbContext.Database.MigrateAsync();
+
+
+if (!await dbContext.Books.AnyAsync())  
 {
-    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContextion>();
-    await dbContext.Database.MigrateAsync(); // Ensure database is created/migrated
-    await dbContext.SeedBooksAsync(); // Seed spooky books
+    
+    await dbContext.SeedBooksAsync();
 }
 
 app.Run();
