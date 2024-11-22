@@ -76,11 +76,7 @@ namespace ChapterHouse.Service
             // Attempt to sign in the user using their email and password
             var result = await _signInManager.PasswordSignInAsync(logInViewModel.Email, logInViewModel.Password, false, lockoutOnFailure: false);
 
-            if (!result.Succeeded)
-            {
-                // Handle failed login attempt (optional: log the failure or throw an exception)
-                throw new InvalidOperationException("Invalid login attempt.");
-            }
+          
         }
 
         public async Task LogOutUser()

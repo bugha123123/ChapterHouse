@@ -62,7 +62,7 @@
                 <h2 class="text-4xl font-bold text-spooky-100">The Haunting of Shadow Manor</h2>
                 <p class="text-xl text-spooky-200">@Model.Publisher</p>
                 @{
-                    var descriptionWords = @Model.Description.Split(' ').Take(400);
+                    var descriptionWords = @Model.Description.Split(' ').Take(200);
                     var truncatedDescription = string.Join(" ", descriptionWords) + (descriptionWords.Count() == 50 ? "..." : "");
                 }
 

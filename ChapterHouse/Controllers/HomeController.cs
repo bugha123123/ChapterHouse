@@ -38,7 +38,11 @@ namespace ChapterHouse.Controllers
           
             return View();
         }
-
+        public async Task<IActionResult> PpublisherBooks(string PublisherName)
+        {
+            var books = await _bookservice.GetPublishersDetails(PublisherName);
+            return View(books);
+        }
         public async Task<IActionResult> wishlist()
         {
             var WishList = await _bookservice.GetAllWishList();

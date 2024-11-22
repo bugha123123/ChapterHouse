@@ -27,5 +27,10 @@ namespace ChapterHouse.Interface
 
         Task RemoveBookFromWishList(int BookId);
 
+        Task<List<Books>> GetBooksWithHighestPageCount();
+
+        Task<List<Books>> GetPopularPublishersBooks();
+
+            Task<List<Books>> GetPublishersDetails( string publisherName);
     }
 }

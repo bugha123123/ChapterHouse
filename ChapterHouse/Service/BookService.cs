@@ -5,8 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using System.Text.Json;
-using System.Threading.Tasks;
 
 public class BookService : IBookService
 
@@ -15,6 +13,7 @@ public class BookService : IBookService
 
     private readonly AppDbContextion _appDbContextion;
     private readonly IAuthService _authService;
+    private int BOOK_PAGE_COUNT = 500;
     public BookService(AppDbContextion appDbContextion, IAuthService authService)
     {
         _appDbContextion = appDbContextion;
@@ -160,5 +159,38 @@ public class BookService : IBookService
     }
 
     public async Task<WishList> GetWishListedBookById(int BookId) => await _appDbContextion.WishList.FirstOrDefaultAsync(x => x.BookId == BookId);
- 
+
+    public async Task<List<Books>> GetBooksWithHighestPageCount()
+    {
+        var BooksWithHighestPageCount = await _appDbContextion.Books.Where(p => p.PageCount > BOOK_PAGE_COUNT).ToListAsync();
+
+        return BooksWithHighestPageCount;
+    }
+
+    public async Task<List<Books>> GetPopularPublishersBooks()
+    {
+
+        var publishersWithMultipleBooks = await _appDbContextion.Books
+          .GroupBy(b => b.Publisher)
+          .Where(g => g.Count() >= 3 && g.Key != "Unknown")  // Exclude "Unknown" publishers here
+          .Select(g => g.Key)
+          .ToListAsync();
+
+        // Retrieve books that belong to these publishers, excluding "Unknown" publishers
+        var books = await _appDbContextion.Books
+            .Where(b => publishersWithMultipleBooks.Contains(b.Publisher) && b.Publisher != "Unknown")
+            .ToListAsync();
+
+        return books;
+
+    }
+
+    public async Task<List<Books>> GetPublishersDetails(string publisherName)
+    {
+        var books = await _appDbContextion.Books
+                                       .Where(b => b.Publisher == publisherName)
+                                       .ToListAsync();
+
+        return books;
+    }
 }

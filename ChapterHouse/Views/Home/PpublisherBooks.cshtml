@@ -1,0 +1,43 @@
+﻿@model List<Books>
+
+<header class="bg-black py-6 mt-5 rounded-3">
+    <div class="container mx-auto px-4">
+        <h1 class="text-4xl font-creepster text-orange-500">Spooky Book Store</h1>
+        <p class="text-lg mt-2">Popular Publishers' Picks</p>
+    </div>
+</header>
+
+<main class="container mx-auto px-4 py-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+  @foreach (var book in Model)
+        {
+          <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105">
+                <a asp-action="Details" asp-controller="Home" asp-route-BookId="@book.Id"><img src="@book.ImageURL" alt="Book Cover" class="w-full h-64 object-cover"></a>
+            <div class="p-4">
+                <h2 class="text-xl font-bold mb-2">@book.Title</h2>
+                <p class="text-gray-400 mb-2">by @book.Publisher</p>
+                    <form asp-action="AddBookToCart" asp-controller="Home" method="post">
+                        <input type="hidden" name="bookId" value="@book.Id" />
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                @if (!User.Identity.IsAuthenticated)
+                                {
+                                    <button type="button" class="btn btn-primary"><a asp-action="signup" asp-controller="Auth" class="text-decoration-none spooky-font text-white">Add to Cart</a></button>
+                                }
+                                else
+                                {
+                                    <button type="submit" class="btn btn-primary spooky-font text-white">Add to Cart</button>
+                                }
+                            </div>
+                          
+                        </div>
+                    </form>
+            </div>
+        </div>  
+        }
+        
+
+   
+     
+    </div>
+</main>

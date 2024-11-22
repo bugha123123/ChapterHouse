@@ -18,7 +18,7 @@ namespace ChapterHouse.Interface
 
         Task RemoveBookFromCart(int CartId);
 
-        //
+        
         Task SendEmailAfterCheckout(string email);
 
         Task ClearCart();
